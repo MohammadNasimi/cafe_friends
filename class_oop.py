@@ -1,3 +1,7 @@
+import psycopg2
+import psycopg2.extras
+from psycopg2._psycopg import connection, cursor
+
 class food:
     def __init__(self, _id, name, category, price, count):
         self._id = _id
@@ -137,9 +141,49 @@ class Cashier():
         self.last_name = last_name
 
     @classmethod
-    def login(cls):
-        pass
+    def login(cls, login_user_name, login_password):
+        con = psycopg2.connect(
+            host="http://castor.db.elephantsql.com",
+            database="emuobeum",
+            user="emuobeum",
+            password="sPxAPxjlHoFajruESmVmv7UN8x0-a4ST"
+        )
+        cur = con.cursor()
+        cur.execute("select id, user_name, password from cashier")
+        rows = cur.fetchall()
+        con.close
+        for i in rows:
+            if i[1] == login_user_name:
+                if i[2] == login_password:
+                    return Cashier.make_object_login(i[0])
+            else:
+                return False
+
     @classmethod
-    def register(cls):
-        pass
+    def make_object_login(cls, cashier_id):
+        con = psycopg2.connect(
+            host="http://castor.db.elephantsql.com",
+            database="emuobeum",
+            user="emuobeum",
+            password="sPxAPxjlHoFajruESmVmv7UN8x0-a4ST"
+        )
+        cur = con.cursor()
+        cur.execute(f'select id, user_name, password , phone_number, email, first_name, last_name from cashier '
+                    f'where id == {cashier_id}')
+        row = cur.fetchall()
+        con.close
+        return Cashier(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6])
+
+    @classmethod
+    def register(cls, id, user_name, password, phone_number, email, first_name, last_name):
+        con = psycopg2.connect(
+            host="http://castor.db.elephantsql.com",
+            database="emuobeum",
+            user="emuobeum",
+            password="sPxAPxjlHoFajruESmVmv7UN8x0-a4ST"
+        )
+        cur = con.cursor()
+        cur.execute(f'INSERT INTO cashire(id, user_name, password, phone_number, email, first_name, last_name)'
+                    f'VALUES ({id}, {user_name}, {password}, {phone_number}, {email}, {first_name}, {last_name})')
+
 
