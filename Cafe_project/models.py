@@ -42,7 +42,7 @@ class Status(DBModel):
 class Cashier(DBModel):
     TABLE = 'cashier'
 
-    def init(self, id, password, phone_number, email, first_name, last_name):
+    def __ini__(self, id, password, phone_number, email, first_name, last_name):
         self.id = id
         self.password = password
         self.phone_number = phone_number
