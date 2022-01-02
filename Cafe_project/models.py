@@ -42,9 +42,8 @@ class Status(DBModel):
 class Cashier(DBModel):
     TABLE = 'cashier'
 
-    def init(self, id, user_name, password, phone_number, email, first_name, last_name):
+    def init(self, id, password, phone_number, email, first_name, last_name):
         self.id = id
-        self.user_name = user_name
         self.password = password
         self.phone_number = phone_number
         self.email = email
@@ -52,11 +51,11 @@ class Cashier(DBModel):
         self.last_name = last_name
 
     @classmethod
-    def login(cls, login_user_name, login_password):
+    def login(cls, login_email, login_password):
         db = DBManager()
         all_cashier_object = db.read_all(Cashier)
         for i in all_cashier_object:
-            if i.username == login_user_name and i.password == login_password:
+            if i.username == login_email and i.password == login_password:
                 return True
         else:
             return False
@@ -73,4 +72,5 @@ class Cashier(DBModel):
             return None
 
     def register(self):
-        DBManager.create(self)
+        db = self.dm
+        db.create(self)
