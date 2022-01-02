@@ -62,11 +62,11 @@ class Cashier(DBModel):
 
 
     @classmethod
-    def return_object_login(cls, cashier_id):
+    def return_object_login(cls, cashier_email):
         db = DBManager()
         all_cashier_object = db.read_all(Cashier)
         for i in all_cashier_object:
-            if i.id == cashier_id :
+            if i.email == cashier_email :
                 return i
         else:
             return None
