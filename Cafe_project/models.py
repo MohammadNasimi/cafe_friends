@@ -1,5 +1,5 @@
 from abc import ABC
-
+from manager import DBManager
 
 class DBModel(ABC):  # abstract base Database model
     TABLE: str  # table name
@@ -37,3 +37,40 @@ class Status(DBModel):
 
     def __repr__(self):
         return f"<Status_class {self.id}:{self.status}>"
+
+
+class Cashier(DBModel):
+    TABLE = 'cashier'
+
+    def init(self, id, user_name, password, phone_number, email, first_name, last_name):
+        self.id = id
+        self.user_name = user_name
+        self.password = password
+        self.phone_number = phone_number
+        self.email = email
+        self.first_name = first_name
+        self.last_name = last_name
+
+    @classmethod
+    def login(cls, login_user_name, login_password):
+        db = DBManager()
+        all_cashier_object = db.read_all(Cashier)
+        for i in all_cashier_object:
+            if i.username == login_user_name and i.password == login_password:
+                return True
+        else:
+            return False
+
+
+    @classmethod
+    def return_object_login(cls, cashier_id):
+        db = DBManager()
+        all_cashier_object = db.read_all(Cashier)
+        for i in all_cashier_object:
+            if i.id == cashier_id :
+                return i
+        else:
+            return None
+
+    def register(self):
+        DBManager.create(self)
